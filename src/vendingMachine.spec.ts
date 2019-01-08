@@ -31,22 +31,39 @@ fdescribe('飲み物自動販売機', () => {
         expect(bool).toBeTruthy();
     });
     describe('100円をいれる', () => {
+
+        beforeEach(() => {
+            // 前処理
+        });
+
         it ('100円入ったよね確認', () => {
             const vendingMachine = new VendingMachine();
-            expect(vendingMachine.postMoney(100)).toEqual(vendingMachine.getMoney());
+            vendingMachine.postMoney(100);
+            expect(vendingMachine.currentMoney).toEqual(vendingMachine.getMoney());
+        });
+
+        it('100円で買える飲み物が分かる', () => {
+            const vendingMachine = new VendingMachine();
+            vendingMachine.postMoney(100);
+            expect(vendingMachine.filterDrink()).toEqual(  [{name: 'cola', count: 1, price: 100}]);
+        });
+
+        it('コーラを選択するとコーラが出てくる', () => {
+            const vendingMachine = new VendingMachine();
+            vendingMachine.buyDrink('cola');
+            const drink = vendingMachine.drinkList.filter(drink => drink.name === 'cola');
+            // [{name; 'cola', ...}, {}, {}, {}]
+            expect(drink[0].count).toEqual(0);
+        });
+
+        it('500円入れてコーラを買うとお金が100円減る', () => {
+            const vendingMachine = new VendingMachine();
+            vendingMachine.postMoney(500);
+            const money = vendingMachine.getMoney();
+            vendingMachine.buyDrink('cola');
+            expect(money).toBe(400);
         });
     });
+
   });
 });
-
-// [
-//     {
-//         name: 'cora',
-//         count: 1,
-//         price: 100,
-//     }
-// ]
-// hoge(100);
-// public hoge(money: number): any {
-
-// }
