@@ -1,0 +1,24 @@
+{
+  "name": "tdd-training",
+  "version": "1.0.0",
+  "description": "TDD training in TypeScript",
+  "scripts": {
+    "test": "$(npm bin)/karma start"
+  },
+  "author": "",
+  "license": "ISC",
+  "repository": "https://github.com/ma9to/tdd-training",
+  "devDependencies": {
+    "@types/jasmine": "^2.8.8",
+    "jasmine-core": "^3.2.1",
+    "karma": "^3.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.2",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-webpack": "^3.0.0",
+    "ts-loader": "^4.5.0",
+    "typescript": "^3.0.1",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
+  }
+}
