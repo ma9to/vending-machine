@@ -30,39 +30,63 @@ fdescribe('飲み物自動販売機', () => {
         const bool = vendingMachine.drinkList.some(drink => drink.name === 'cola');
         expect(bool).toBeTruthy();
     });
-    describe('100円をいれる', () => {
 
-        beforeEach(() => {
-            // 前処理
-        });
+    it ('100円入れたら入金額が100円になる', () => {
+        const vendingMachine = new VendingMachine();
+        vendingMachine.postMoney(100);
+        expect(vendingMachine.currentMoney).toEqual(vendingMachine.getMoney());
+    });
 
-        it ('100円入ったよね確認', () => {
-            const vendingMachine = new VendingMachine();
-            vendingMachine.postMoney(100);
-            expect(vendingMachine.currentMoney).toEqual(vendingMachine.getMoney());
-        });
-
+    describe('買える飲み物がわかる', () => {
         it('100円で買える飲み物が分かる', () => {
-            const vendingMachine = new VendingMachine();
-            vendingMachine.postMoney(100);
-            expect(vendingMachine.filterDrink()).toEqual(  [{name: 'cola', count: 1, price: 100}]);
-        });
+            [
+                    {price: 100, expected: ['cola']},
+                    {price: 300, expected: ['cola', 'monster']}
+            ].forEach((data) =>{
+                const vendingMachine = new VendingMachine();
+                vendingMachine.postMoney(data.price);
+                expect(vendingMachine.canBuyDrinkList()).toEqual(  data.expected);
+            })
 
-        it('コーラを選択するとコーラが出てくる', () => {
-            const vendingMachine = new VendingMachine();
-            vendingMachine.buyDrink('cola');
-            const drink = vendingMachine.drinkList.filter(drink => drink.name === 'cola');
-            // [{name; 'cola', ...}, {}, {}, {}]
-            expect(drink[0].count).toEqual(0);
         });
+    });
 
-        it('500円入れてコーラを買うとお金が100円減る', () => {
-            const vendingMachine = new VendingMachine();
-            vendingMachine.postMoney(500);
-            const money = vendingMachine.getMoney();
-            vendingMachine.buyDrink('cola');
-            expect(money).toBe(400);
-        });
+
+    it('コーラを選択するとコーラが出てくる', () => {
+        const vendingMachine = new VendingMachine();
+        vendingMachine.addDrink('cola');
+        vendingMachine.buyDrink('cola');
+        const drink = vendingMachine.drinkList.filter(drink => drink.name === 'cola');
+        // [{name; 'cola', ...}, {}, {}, {}]
+        expect(drink[0].count).toEqual(0);
+    });
+
+    describe('投入金額から購入したドリンク分の金額が減る', () => {
+        [
+            {
+                name: 'cola',
+                expected: 400,
+            },
+            {
+                name: 'monster',
+                expected: 290,
+            }
+         ].forEach((data) => {
+            it(`500円入れて${data.name}を買うと残金が${data.expected}`, () => {
+                const vendingMachine = new VendingMachine();
+                vendingMachine.postMoney(500);
+                vendingMachine.buyDrink(data.name);
+                const money = vendingMachine.getMoney();
+                expect(money).toBe(data.expected);
+            });
+        })
+    })
+
+    it('monsterの在庫が追加できる', () => {
+        const vendingMachine = new VendingMachine();
+        vendingMachine.addDrink('monster');
+        vendingMachine.addDrink('monster');
+        expect(vendingMachine.countDrink('monster')).toBe(2);
     });
 
   });
