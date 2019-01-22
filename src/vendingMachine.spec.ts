@@ -1,9 +1,9 @@
 // 飲み物自動販売機
-// - 飲み物を選んで購入できる
-// - お金を入れると、入金額が見られる
+// done 飲み物を選んで購入できる
+// done お金を入れると、入金額が見られる
 // - お金が足りないときは、購入できない
 // - 連続で入れると、入金額が加算される
-// - 飲み物の在庫を追加できる
+// done 飲み物の在庫を追加できる
 // - 飲み物の在庫を確認できる
 // - 使えないお金がある(1,5,2000,5000,10000)
 
@@ -89,5 +89,12 @@ fdescribe('飲み物自動販売機', () => {
         expect(vendingMachine.countDrink('monster')).toBe(2);
     });
 
+      it('お金が足りないと購入できない', () => {
+          const vendingMachine = new VendingMachine();
+          vendingMachine.addDrink('monster');
+          vendingMachine.postMoney(100);
+          const bool = vendingMachine.buyDrink('monster');
+          expect(bool).toBeTruthy();
+      });
   });
 });

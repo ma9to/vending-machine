@@ -27,15 +27,27 @@ export class VendingMachine {
     }
 
     buyDrink(drinkName: string): void {
+        this.reduceDrink(drinkName);
+
+        const drinkMomey = this.getPrice(drinkName);
+
+        this.currentMoney = this.getBalance(drinkMomey);
+    }
+
+    private getBalance(drinkMomey) {
+        return this.getMoney() - drinkMomey;
+    }
+
+    private getPrice(drinkName: string) {
+        return this.drinkList.find(drink => drink.name === drinkName).price;
+    }
+
+    private reduceDrink(drinkName: string) {
         this.drinkList.map(drink => {
             if (drink.name === drinkName) {
                 drink.count -= 1;
             }
-        })
-
-        const drinkMomey = this.drinkList.find(drink => drink.name === drinkName).price;
-
-        this.currentMoney = this.getMoney() - drinkMomey;
+        });
     }
 
     addDrink(drinkName: string): void {
